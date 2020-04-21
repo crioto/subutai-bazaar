@@ -11,10 +11,10 @@ setuptools.setup(
     version=version_number,
     author="crioto",
     author_email="msavochkin@optdyn.com",
-    description="A small example package",
+    description="Library for Subutai Bazaar REST API",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pypa/sampleproject",
+    url="https://github.com/crioto/subutai-bazaar",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

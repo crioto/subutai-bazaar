@@ -12,7 +12,6 @@ class Node:
 
 
 class Bazaar:
-
     def __init__(self, host=''):
         if host != '' and host != 'master' and host != 'dev':
             raise Exception('Unknown CDN URL')

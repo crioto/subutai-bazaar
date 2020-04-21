@@ -5,10 +5,10 @@ import json
 
 class Node:
     def __init__(self, hostname, templateId, peerID, resourceHostID):
-        self.hostname = hostname
-        self.templateId = templateId
-        self.peerID = peerID
-        self.resourceHostID = resourceHostID
+        self.__hostname = hostname
+        self.__templateId = templateId
+        self.__peerID = peerID
+        self.__resourceHostID = resourceHostID
 
 
 class Bazaar:
@@ -16,17 +16,20 @@ class Bazaar:
     def __init__(self, host=''):
         if host != '' and host != 'master' and host != 'dev':
             raise Exception('Unknown CDN URL')
-        self.url = host+'bazaar.subutai.io'
-        self.scheme = 'https://'
-        self.session = ''
-        self.session_name = 'SUBUTAI_HUB_SESSION'
+        self.__url = host+'bazaar.subutai.io'
+        self.__scheme = 'https://'
+        self.__session = ''
+        self.__session_name = 'SUBUTAI_HUB_SESSION'
         return
+
+    def url(self):
+        return self.__url
 
     def __perform(self, method, endpoint, data=None, headers=None):
         cookies = {}
-        if self.session != '':
+        if self.__session != '':
             cookies = {
-                self.session_name: self.session
+                self.__session_name: self.__session
             }
         if method == "get":
             return self.__get(endpoint, data, headers, cookies)
@@ -64,10 +67,10 @@ class Bazaar:
                 'headers': res.headers, 'cookies': res.cookies}
 
     def __buildURL(self, endpoint):
-        return urllib.parse.urljoin(self.scheme + self.url, endpoint)
+        return urllib.parse.urljoin(self.__scheme + self.__url, endpoint)
 
     def Auth(self, username, password):
-        self.session = ''
+        self.__session = ''
         payload = {
             'email': username,
             'password': password
@@ -78,13 +81,13 @@ class Bazaar:
         res = self.__perform("post", "/rest/v1/client/login", payload, headers)
         if res['status'] == 200:
             for cookie in res['cookies']:
-                if cookie.name == self.session_name:
-                    self.session = cookie.value
+                if cookie.name == self.__session_name:
+                    self.__session = cookie.value
                     return True
         return False
 
     def ListPeers(self, peertype=''):
-        if self.session == '':
+        if self.__session == '':
             raise Exception('Not Authenticated')
         if peertype == '':
             peertype = 'public'
@@ -95,7 +98,7 @@ class Bazaar:
         return []
 
     def CreateEnvironment(self, name, keys, hosts, nodes):
-        if self.session == '':
+        if self.__session == '':
             raise Exception('Not Authenticated')
 
         nodes = []

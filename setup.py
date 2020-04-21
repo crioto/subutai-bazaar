@@ -7,7 +7,7 @@ with open("VERSION", "r") as fh:
     version_number = fh.read()
 
 setuptools.setup(
-    name="subutai-bazaar-crioto", # Replace with your own username
+    name="subutai-bazaar",
     version=version_number,
     author="crioto",
     author_email="msavochkin@optdyn.com",

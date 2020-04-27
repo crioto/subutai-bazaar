@@ -55,13 +55,13 @@ class Bazaar:
                 'headers': res.headers, 'cookies': res.cookies}
 
     def __put(self, endpoint, data, headers, cookies):
-        res = requests.post(self.__buildURL(endpoint), data=data,
+        res = requests.put(self.__buildURL(endpoint), data=data,
                             headers=headers, cookies=cookies)
         return {'status': res.status_code, 'content': res.content,
                 'headers': res.headers, 'cookies': res.cookies}
 
     def __delete(self, endpoint, data, headers, cookies):
-        res = requests.post(self.__buildURL(endpoint), data=data,
+        res = requests.delete(self.__buildURL(endpoint), data=data,
                             headers=headers, cookies=cookies)
         return {'status': res.status_code, 'content': res.content,
                 'headers': res.headers, 'cookies': res.cookies}
@@ -100,7 +100,6 @@ class Bazaar:
                 np = peer.Peer(p)
                 result.append(np)
             return result
-            #return json.loads(res['content'])
         return []
 
     def CreateEnvironment(self, name, keys, hosts, nodes):
@@ -118,18 +117,28 @@ class Bazaar:
 
         return
 
-    def AddPeerToFavorites(self, peerID):
+    def AddPeerToFavorites(self, peer):
+        if peer == None:
+            raise Exception('Null peer')
         if self.__session == '':
             raise Exception('Not Authenticated')
-        res = self.__perform("put", "/rest/v1/client/peers/favorite/"+peerID)
+        if peer.ID() == '':
+            raise Exception('Bad Peer ID')
+        res = self.__perform("put", "/rest/v1/client/peers/favorite/"+
+                             peer.ID())
         if res['status'] == 200:
             return True
         return False
 
-    def RemovePeerFromFavorites(self, peerID):
+    def RemovePeerFromFavorites(self, peer):
+        if peer == None:
+            raise Exception('Null peer')
         if self.__session == '':
             raise Exception('Not Authenticated')
-        res = self.__perform("delete", "/rest/v1/client/peers/favorite/"+peerID)
+        if peer.ID() == '':
+            raise Exception('Bad Peer ID')
+        res = self.__perform("delete", "/rest/v1/client/peers/favorite/"+
+                             peer.ID())
         if res['status'] == 200:
             return True
         return False

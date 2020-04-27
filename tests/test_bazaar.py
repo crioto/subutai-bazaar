@@ -27,12 +27,16 @@ def test_full():
 
     assert b.Auth(username, password) == True
     favorites = b.ListPeers("favorite")
-    #for fav in favorites:
-    #    for rh in fav.ResourceHosts():
-    #        print(rh.CPUData())
-    print(favorites)
-#    for peer in favorites:
-#        b.RemovePeerFromFavorites(peer)
+    for fav in favorites:
+        assert b.RemovePeerFromFavorites(fav) == True
+
+    public = b.ListPeers()
+
+    # This may fail if dev bazaar have no public peers
+    assert len(public) > 0
+
+    assert b.AddPeerToFavorites()
+
 
 def test_bazaar_init():
     b1 = bazaar.Bazaar()

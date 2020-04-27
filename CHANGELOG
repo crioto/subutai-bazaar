@@ -1,0 +1,6 @@
+## [0.0.2] 04/27/2020 <msavochkin@optdyn.com>
+
+* Added classes for Peer and Resource Hosts that parse peers from Bazaar
+* Added AddPeerToFavorites and RemovePeerFromFavorites
+* Added tests for Peer and Resource Host parsing
+* Added full-cycle test for Bazaar operations

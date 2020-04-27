@@ -1,6 +1,7 @@
 import requests
 import urllib.parse
 import json
+from subutai_bazaar import peer
 
 
 class Node:
@@ -93,7 +94,13 @@ class Bazaar:
 
         res = self.__perform("get", "/rest/v1/client/peers/"+peertype)
         if res['status'] == 200:
-            return json.loads(res['content'])
+            peers = json.loads(res['content'])
+            result = []
+            for p in peers:
+                np = peer.Peer(p)
+                result.append(np)
+            return result
+            #return json.loads(res['content'])
         return []
 
     def CreateEnvironment(self, name, keys, hosts, nodes):
@@ -110,3 +117,20 @@ class Bazaar:
         }
 
         return
+
+    def AddPeerToFavorites(self, peerID):
+        if self.__session == '':
+            raise Exception('Not Authenticated')
+        res = self.__perform("put", "/rest/v1/client/peers/favorite/"+peerID)
+        if res['status'] == 200:
+            return True
+        return False
+
+    def RemovePeerFromFavorites(self, peerID):
+        if self.__session == '':
+            raise Exception('Not Authenticated')
+        res = self.__perform("delete", "/rest/v1/client/peers/favorite/"+peerID)
+        if res['status'] == 200:
+            return True
+        return False
+

@@ -35,7 +35,6 @@ class Peer:
         if 'peer_id' in peer:
             self.__id = peer['peer_id']
 
-
     def ResourceHosts(self):
         return self.__resourceHosts
 

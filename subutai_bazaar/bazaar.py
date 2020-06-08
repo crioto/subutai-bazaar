@@ -2,6 +2,8 @@ import requests
 import urllib.parse
 import json
 from subutai_bazaar import peer
+from subutai_bazaar import environment
+from subutai_bazaar import client
 
 
 class Node:
@@ -78,7 +80,8 @@ class Bazaar:
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
-        res = self.__perform("post", "/rest/v1/client/login", payload, headers)
+        c = client.Client(self.__url)
+        res = c.Perform("post", "/rest/v1/client/login", payload, headers)
         if res['status'] == 200:
             for cookie in res['cookies']:
                 if cookie.name == self.__session_name:
@@ -117,6 +120,12 @@ class Bazaar:
 
         return
 
+    def RunBlueprint(self, blueprint, peers):
+        return
+
+    def __blueprintVariables(self, blueprint):
+        return
+
     def AddPeerToFavorites(self, peer):
         if peer == None:
             raise Exception('Null peer')
@@ -143,3 +152,26 @@ class Bazaar:
             return True
         return False
 
+    def GetBalance(self):
+        if self.__session == '':
+            raise Exception('Not Authenticated')
+        res = self.__perform("get", "/rest/v1/client/balance")
+        if res['status'] != 200:
+            raise Exception('Balance request failed')
+        data = json.loads(res['content'])
+        if 'value' not in data:
+            raise Exception('Bad response format')
+        return float(data['value'])
+
+    def ListEnvironments(self):
+        if self.__session == '':
+            raise Exception('Not Authenticated')
+        res = self.__perform("get", "/rest/v1/client/environments")
+        if res['status'] != 200:
+            raise Exception('Environments request failed')
+        data = json.loads(res['content'])
+        envs = []
+        for e in data:
+            ne = environment.Environment(e)
+            envs.append(e)
+        return envs

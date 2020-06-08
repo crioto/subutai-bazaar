@@ -34,8 +34,11 @@ def test_full():
 
     # This may fail if dev bazaar have no public peers
     assert len(public) > 0
-
-    assert b.AddPeerToFavorites()
+    assert b.AddPeerToFavorites(public[0]) == True
+    # This may fail if test user have zero balance
+    assert b.GetBalance() > 0.0
+    envs = b.ListEnvironments()
+    print(envs)
 
 
 def test_bazaar_init():

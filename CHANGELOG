@@ -1,3 +1,10 @@
+## [0.0.3] 06/08/2020 <msavochkin@optdyn.com>
+
+* Implemented basic CDN (IPFS) interface
+* Single file info with `Info()`
+* File upload with `Upload()`
+* New requirement: `python-gnupg` library
+
 ## [0.0.2] 04/27/2020 <msavochkin@optdyn.com>
 
 * Added classes for Peer and Resource Hosts that parse peers from Bazaar

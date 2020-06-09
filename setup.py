@@ -3,7 +3,7 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-version_number = "0.0.4"
+version_number = "0.0.5"
 
 setuptools.setup(
     name="subutai-bazaar",

@@ -2,11 +2,12 @@ import requests
 import urllib.parse
 
 class Client:
-    def __init__(self, url='', scheme='https'):
+    def __init__(self, url='', scheme='https', verify=True):
         self.__url = url
         self.__scheme = scheme
         self.__session = ''
         self.__sessionName = ''
+        self.__verify = verify
         return
 
     def Perform(self, method, endpoint, data=None, headers=None, files=None):
@@ -29,25 +30,29 @@ class Client:
     def __get(self, endpoint, data, headers, cookies, files):
         print(self.__buildURL(endpoint))
         res = requests.get(self.__buildURL(endpoint), data=data,
-                           headers=headers, cookies=cookies, files=files)
+                           headers=headers, cookies=cookies,
+                           files=files, verify=self.__verify)
         return {'status': res.status_code, 'content': res.content,
                 'headers': res.headers, 'cookies': res.cookies}
 
     def __post(self, endpoint, data, headers, cookies, files):
         res = requests.post(self.__buildURL(endpoint), data=data,
-                            headers=headers, cookies=cookies, files=files)
+                            headers=headers, cookies=cookies,
+                            files=files, verify=self.__verify)
         return {'status': res.status_code, 'content': res.content,
                 'headers': res.headers, 'cookies': res.cookies}
 
     def __put(self, endpoint, data, headers, cookies, files):
         res = requests.put(self.__buildURL(endpoint), data=data,
-                            headers=headers, cookies=cookies, files=files)
+                            headers=headers, cookies=cookies,
+                           files=files, verify=self.__verify)
         return {'status': res.status_code, 'content': res.content,
                 'headers': res.headers, 'cookies': res.cookies}
 
     def __delete(self, endpoint, data, headers, cookies, files):
         res = requests.delete(self.__buildURL(endpoint), data=data,
-                            headers=headers, cookies=cookies, files=files)
+                              headers=headers, cookies=cookies,
+                              files=files, verify=self.__verify)
         return {'status': res.status_code, 'content': res.content,
                 'headers': res.headers, 'cookies': res.cookies}
 

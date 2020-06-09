@@ -28,7 +28,6 @@ class Client:
             return
 
     def __get(self, endpoint, data, headers, cookies, files):
-        print(self.__buildURL(endpoint))
         res = requests.get(self.__buildURL(endpoint), data=data,
                            headers=headers, cookies=cookies,
                            files=files, verify=self.__verify)

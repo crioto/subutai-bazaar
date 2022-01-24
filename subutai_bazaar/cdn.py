@@ -1,4 +1,4 @@
-from subutai_bazaar import client
+import client
 import subprocess
 import json
 import gnupg
@@ -53,12 +53,15 @@ class CDN:
         if token == None:
             raise Exception('Failed to retrieve token')
         c = client.Client(self.__host, verify=self.__verify)
+        print("Token: " + token)
         res = c.Perform("delete",
-                        "/rest/v1/cdn/raw",
-                        headers={"token": token, "id": fileid},
-                        data={"id": fileid, "token": token})
+                        "/rest/v1/cdn/raw?token="+token+"&id="+fileid)
+#                        headers={"token": token, "id": fileid},
+#                        data={"id": fileid, "token": token})
         if res['status'] == 200:
             return True
+        print(res['status'])
+        print(res['content'])
         return False
 
     def Info(self, filename):
@@ -67,6 +70,14 @@ class CDN:
         if res['status'] == 200:
             return json.loads(res['content'])
         return None
+
+    def List(self, filename):
+        c = client.Client(self.__host, verify=self.__verify)
+        res = c.Perform('get', '/rest/v1/cdn/raw?name='+filename)
+        if res['status'] == 200:
+            return json.loads(res['content'])
+        return None
+
 
     def __get(self, endpoint, data, headers, cookies):
         return

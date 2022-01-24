@@ -41,8 +41,25 @@ class CDN:
     def Download(self, filename):
         return
 
-    def Delete(self, filename):
-        return
+    def Delete(self, fileid):
+        if self.__user == None:
+            raise Exception('Bazaar user not provided')
+        if self.__fingerprint == None:
+            raise Exception('GPG fingerprint not provided')
+        authID = self.__authID()
+        if authID == None:
+            raise Exception('Failed to retrieve Auth ID')
+        token = self.__token(authID)
+        if token == None:
+            raise Exception('Failed to retrieve token')
+        c = client.Client(self.__host, verify=self.__verify)
+        res = c.Perform("delete",
+                        "/rest/v1/cdn/raw",
+                        headers={"token": token, "id": fileid},
+                        data={"id": fileid, "token": token})
+        if res['status'] == 200:
+            return True
+        return False
 
     def Info(self, filename):
         c = client.Client(self.__host, verify=self.__verify)
